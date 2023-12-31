@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流量卡商城</title>
+    <style>
+        /* 添加您的样式表样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .card {
+            width: 300px;
+            margin: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>流量卡商城</h1>
+</header>
+
+<section id="product-list">
+    <!-- 这里添加流量卡产品卡片 -->
+    <div class="card">
+        <h2>流量卡</h2>
+        <img src="https://oss.space77.cn/image/158/2023/12/4685c631965f11f69ce0ec9f8871e3f6.jpg" alt="流量卡1 - 图片1">
+        <img src="https://oss.space77.cn/image/158/2023/11/6721e44d4fff7a5afba187bd177f7166.jpg" alt="流量卡1 - 图片2">
+        <img src="https://oss.space77.cn/image/158/2023/12/5af7a318a23ee282048758f2744099ac.jpg" alt="流量卡1 - 图片3">
+        <img src="https://oss.space77.cn/image/158/2023/11/98ca7c3b13890c7d8329c065e5b7b413.jpg" alt="流量卡1 - 图片4">
+        <p>描述：适用于各种网络环境，高速稳定。</p>
+        <p>价格：$10.00</p>
+        <button onclick="addToCart(1)">添加到购物车 哈哈哈哈你被骗了怎么可能会给您订购的呢？</button>
+    </div>
+
+    <div class="card">
+        <h2>流量卡 2</h2>
+        <p>描述：大容量数据，全球通用。</p>
+        <p>价格：\$20.00</p>
+        <button onclick="addToCart(2)">添加到购物车</button>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2023 流量卡商城. 版权所有.</p>
+</footer>
+
+<script>
+    // 在这里添加JavaScript代码，处理购物车逻辑等
+    function addToCart(productId) {
+        // 添加到购物车的逻辑
+        alert('商品已添加到购物车！');
+    }
+</script>
+
+</body>
+</html>
