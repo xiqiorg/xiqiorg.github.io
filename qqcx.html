@@ -1,0 +1,114 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QQ信息查询</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .input-container input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-container button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        .result-container p {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <footer style="text-align: center; margin-top: 20px; color: red;">
+        本站是调用API编写而成，所以也有时效性。如果发现不能使用了，欢迎评论留言。
+    </footer>
+</head>
+<body>
+    <h1><i class="fab fa-qq"></i> QQ信息查询</h1>
+
+    <div class="container">
+        <div class="input-container">
+            <input type="text" id="qq-input" placeholder="请输入QQ号">
+            <button id="search-button"><i class="fas fa-search"></i> 查询</button>
+        </div>
+
+        <div id="result-container" class="result-container"></div>
+    </div>
+
+    <script>
+        const searchButton = document.getElementById("search-button");
+        const qqInput = document.getElementById("qq-input");
+        const resultContainer = document.getElementById("result-container");
+
+        searchButton.addEventListener("click", () => {
+            const qq = qqInput.value.trim();
+
+            if (qq === "") {
+                alert("请输入有效的QQ号");
+                return;
+            }
+
+            const apiUrl = `https://api.pearktrue.cn/api/qq/query.php?qq=${qq}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const resultHtml = `
+                            <div>
+                                <p><i class="fas fa-user-circle"></i> QQ号：${data.data.user_id}</p>
+                                <p><i class="fas fa-user"></i> 昵称：${data.data.nickname}</p>
+                                <p><i class="fas fa-venus-mars"></i> 性别：${data.data.sex}</p>
+                                <p><i class="fas fa-birthday-cake"></i> 年龄：${data.data.age}</p>
+                                <p><i class="fas fa-star"></i> 等级：${data.data.level}</p>
+                                <p><i class="fas fa-crown"></i> 会员等级：${data.data.vip_level}</p>
+                                <p><i class="fas fa-pencil-alt"></i> 个性签名：${data.data.sign}</p>
+                            </div>
+                        `;
+                        resultContainer.innerHTML = resultHtml;
+                    } else {
+                        resultContainer.textContent = `出现错误：${data.msg}`;
+                    }
+                })
+                .catch(error => {
+                    console.error("查询QQ信息时发生错误：", error);
+                    resultContainer.textContent = "抱歉，出现了一些问题，请稍后再试。";
+                });
+        });
+    </script>
+</body>
+</html>
