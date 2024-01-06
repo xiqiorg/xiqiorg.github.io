@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>备案查询</title>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" href="https://www.baidu.com/favicon.ico" type="image/x-icon" />
+	<!-- 引入字体图标库 -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #F9F9F9;
+			color: #333;
+			text-align: center;
+			padding: 20px;
+		}
+
+		h1 {
+			font-size: 40px;
+			margin-bottom: 20px;
+		}
+
+		.container {
+			max-width: 400px;
+			margin: 0 auto;
+			background-color: #FFFFFF;
+			border-radius: 4px;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+		}
+
+		form {
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		label {
+			font-size: 18px;
+			margin-right: 10px;
+		}
+
+		input[type="text"] {
+			padding: 8px;
+			font-size: 16px;
+			flex: 1;
+			border: none;
+			border-radius: 4px;
+			background-color: #F2F2F2;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+		}
+
+		button[type="submit"] {
+			padding: 10px 20px;
+			font-size: 16px;
+			font-weight: bold;
+			color: #FFFFFF;
+			background-color: #4285F4;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+			transition: background-color 0.2s ease-in-out;
+			text-transform: uppercase;
+		}
+
+		button[type="submit"]:hover {
+			background-color: #3367D6;
+		}
+
+		.result-box {
+			padding: 20px;
+			font-size: 18px;
+			line-height: 1.6;
+			background-color: #F2F2F2;
+			border-radius: 4px;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+			text-align: left;
+		}
+
+		.result-box p {
+			margin-bottom: 10px;
+		}
+
+		.icon {
+			font-size: 24px;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<h1>备案查询</h1>
+	<div class="container">
+		<form id="form">
+			<label for="url"><i class="fas fa-link icon"></i>请输入要查询的域名：</label>
+			<input type="text" id="url" name="url">
+			<button type="submit"><i class="fas fa-search icon"></i>查询</button>
+		</form>
+		<div class="result-box" id="result"></div>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+	<script>
+		const form = document.getElementById('form');
+		const resultDiv = document.getElementById('result');
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const url = document.getElementById('url').value;
+			if (url.trim() === '') {
+				alert('请输入要查询的域名！');
+				return;
+			}
+
+			resultDiv.innerHTML = '正在查询，请稍候...';
+
+			fetch(`https://v.api.aa1.cn/api/icp/index.php?url=${url}`)
+				.then(response => response.json())
+				.then(data => {
+					resultDiv.innerHTML = `
+						<p><i class="fas fa-fingerprint icon"></i>备案号：${data.icp}</p>
+						<p><i class="fas fa-building icon"></i>备案主体名：${data.unitName}</p>
+						<p><i class="fas fa-users icon"></i>备案主体类型：${data.natureName}</p>
+					`;
+				})
+				.catch(error => {
+					resultDiv.innerHTML = `查询失败：${error.message}`;
+				});
+		});
+	</script>
+</body>
+</html>
