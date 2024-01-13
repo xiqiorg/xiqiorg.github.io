@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>域名拦截和IP归属地检测</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .input-field {
+            margin: 20px 0;
+            display: inline-block;
+        }
+        .input-field input {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 3px #e6e6e6;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        #result, #ipInfo {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>域名拦截和IP归属地检测</h1>
+    <div class="input-field">
+        <input type="text" id="domainInput" placeholder="输入域名">
+        <button class="button" onclick="checkDomain()">检测</button>
+    </div>
+
+    <div id="result"></div>
+
+    <div id="ipInfo"></div>
+
+    <div class="footer">
+        <p>该网页查询的内容仅供参考</p>
+    </div>
+
+    <script>
+        function checkDomain() {
+            var domain = document.getElementById('domainInput').value;
+            if(domain) {
+                var apiUrl = 'https://v.api.aa1.cn/api/domain-ok/index.php?url=' + domain;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        var resultDiv = document.getElementById('result');
+                        if(data.code === 200) {
+                            resultDiv.innerHTML = `
+                                <p><strong>域名：</strong>${data.url}</p>
+                                <p><strong>QQ拦截状态：</strong>${data.qq}</p>
+                                <p><strong>微信拦截状态：</strong>${data.vx}</p>
+                            `;
+                        } else {
+                            resultDiv.innerHTML = '<p>无法获取数据，请稍后再试。</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("检测失败，请稍后再试。");
+                    });
+            } else {
+                alert("请输入域名。");
+            }
+        }
+
+        function fetchIPInfo() {
+            var apiUrl = 'https://api.qjqq.cn/api/Local';
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var ipInfoDiv = document.getElementById('ipInfo');
+                    if(data.code === "Success") {
+                        ipInfoDiv.innerHTML = `
+                            <p><strong>您的IP地址：</strong>${data.ip}</p>
+                            <p><strong>归属地：</strong>${data.data.country} ${data.data.prov} ${data.data.city}</p>
+                            <p><strong>ISP：</strong>${data.data.isp}</p                             <p><strong>区县：</strong>${data.data.district}</p>
+                            <p><strong>邮政编码：</strong>${data.data.zipcode}</p>
+                            <p><strong>时区：</strong>${data.data.timezone}</p>
+                            <p><strong>纬度：</strong>${data.data.lat}</p>
+                            <p><strong>经度：</strong>${data.data.lng}</p>
+                        `;
+                    } else {
+                        ipInfoDiv.innerHTML = '<p>无法获取IP信息，请稍后再试。</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("获取IP信息失败，请稍后再试。");
+                });
+        }
+
+        // 当页面加载完毕时获取IP信息
+        window.onload = function() {
+            fetchIPInfo();
+        };
+    </script>
+</body>
+</html>
+
