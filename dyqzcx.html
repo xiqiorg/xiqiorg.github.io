@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>抖音权重查询</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .btn-bounce {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 0;
+            width: 120px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .modal-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">抖音权重查询</h1>
+        <p class="text-muted">查询需要时间，请耐心等待！</p>
+        <div class="mb-3">
+            <label for="url" class="form-label">用户主页链接：</label>
+            <input type="text" id="url" class="form-control" placeholder="不得包含任何文字，只能包含分享链接">
+        </div>
+        <button onclick="query()" class="btn btn-primary">查询</button>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <button onclick="showSponsorModal()" class="btn btn-secondary btn-bounce">赞助</button>
+
+    <div class="modal" id="sponsorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">微信赞助</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="sponsor.jpg" class="modal-image">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function query() {
+            var url = encodeURIComponent($("#url").val());
+            var apiUrl = "https://api.pearktrue.cn/api/dy/check.php?url=" + url;
+
+            $.ajax({
+                url: apiUrl,
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    if (response.code === 200) {
+                        var data = response.data;
+                        var html = "<p><i class='fas fa-user'></i> 用户ID：" + response.user + "</p>";
+                        html += "<p><i class='fas fa-user'></i> 用户名称：" + response.name + "</p>";
+                        html += "<p><i class='fas fa-image'></i> 用户头像：<img src='" + response.imgurl + "'></p>";
+                        html += "<p><i class='fas fa-medal'></i> 权重等级：" + data.weight + "</p>";
+                        html += "<p><i class='fas fa-chart-line'></i> 账号指数：" + data.index + "</p>";
+                        html += "<p><i class='fas fa-users'></i> 粉丝数量：" + data.fans + "</p>";
+                        html += "<p><i class='far fa-thumbs-up'></i> 赞数量：" + data.clicklike + "</p>";
+                        html += "<p><i class='fas fa-video'></i> 作品数量：" + data.works + "</p>";
+                        html += "<p><i class='fas fa-info-circle'></i> 个人简介：" + data.introduction + "</p>";
+                        html += "<p><i class='fas fa-user-friends'></i> 关注数量：" + data.follow + "</p>";
+                        html += "<p><i class='fas fa-ban'></i> 账号状态：" + data.status + "</p>";
+                        html += "<p><i class='fas fa-birthday-cake'></i> 年龄：" + data.age + "</p>";
+                        html += "<p><i class='fas fa-venus-mars'></i> 性别：" + data.sex + "</p>";
+                        html += "<p><i class='fas fa-graduation-cap'></i> 学校：" + data.school + "</p>";
+                        html += "<p><i class='fas fa-map-marker-alt'></i> 地理位置：" + data.location + "</p>";
+                        html += "<p><i class='fas fa-star'></i> 综合评分：" + data.score + "</p>";
+                        html += "<p><i class='fas fa-chart-bar'></i> 流量池建议：" + data.flow + "</p>";
+                        html += "<p><i class='fas fa-tags'></i> 标签建议：" + data.label + "</p>";
+                        html += "<p><i class='far fa-clock'></i> 活跃时间：" + data.time + "</p>";
+                        html += "<p><i class='fas fa-money-bill-alt'></i> 账号估值：" + data.valuation + "</p>";
+                        html += "<p><i class='fas fa-signal'></i> 综合指数：" + data.synthesize + "</p>";
+
+                        $("#result").html(html);
+                    } else {
+                        $("#result").text("查询失败：" + response.msg);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#result").text("查询失败：" + error);
+                }
+            });
+        }
+
+        function showSponsorModal() {
+            $('#sponsorModal').modal('show');
+        }
+    </script>
+</body>
+</html>
